@@ -78,9 +78,9 @@ import { ActivityType } from "discord.js";
 // Manual / Auto setup
 let manualOverride = false;
 let manualStatus = {
-  name: 'ôn thi giữa kì cùng dev!',
+  name: 'test bot online 24/7',
   type: ActivityType.Competing,
-  status: 'dnd'
+  status: 'online'
 };
 
 const autoStatuses = [
@@ -379,3 +379,4 @@ const app = express();
 
 app.get("/", (req, res) => res.send("Kaoruko đang hoạt động! 💖"));
 app.listen(3000, () => console.log("🌐 Web server chạy ở cổng 3000 để giữ bot online"));
+

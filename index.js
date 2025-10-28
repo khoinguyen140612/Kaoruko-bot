@@ -370,3 +370,12 @@ process.on("unhandledRejection", (reason, promise) => {
 // Login Discord
 // -------------------------
 client.login(process.env.DISCORD_TOKEN);
+
+// -------------------------
+// Giữ cho Render không ngủ 😴
+// -------------------------
+import express from "express";
+const app = express();
+
+app.get("/", (req, res) => res.send("Kaoruko đang hoạt động! 💖"));
+app.listen(3000, () => console.log("🌐 Web server chạy ở cổng 3000 để giữ bot online"));

@@ -302,7 +302,6 @@ client.on("messageCreate", async (message) => {
   }
 
   // --------- 🧠 Chat AI ---------
-  // --------- 🧠 Chat AI ---------
   try {
   // 💬 Chỉ phản hồi khi được gọi bằng tên hoặc tag bot
   const content = message.content.toLowerCase();
@@ -390,3 +389,4 @@ const app = express();
 
 app.get("/", (req, res) => res.send("Kaoruko đang hoạt động! 💖"));
 app.listen(3000, () => console.log("🌐 Web server chạy ở cổng 3000 để giữ bot online"));
+

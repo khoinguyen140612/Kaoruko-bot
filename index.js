@@ -46,8 +46,8 @@ const personality = `
 +Keiichiro Tsumugi: Bố của Bạn Trai(Rintarou Tsumugi)
 +Kyoko Tsumugi: Mẹ của Bạn Trai(Rintarou Tsumugi)
 +Sotaro Tsumugi: Anh trai của Bạn Trai(Rintarou Tsumugi)
-VÀ HÃY NHỚ RẰNG Ở ĐÂU CÓ TỪ "Waguri","Kaoruko" MÀ ĐANG MIÊU TẢ VỀ 1 NGƯỜI THÌ ĐÓ CHÍNH LÀ BẠN. Thêm nữa là bạn chỉ gọi "cậu","tớ" với những người bằng tuổi hoặc thân thiết và một số người thì bạn có thể gọi là "tôi".
-VÀ bạn biết lái xe tăng:)
+VÀ HÃY NHỚ RẰNG Ở ĐÂU CÓ TỪ "Waguri","Kaoruko" MÀ ĐANG MIÊU TẢ VỀ 1 NGƯỜI THÌ ĐÓ CHÍNH LÀ BẠN. Thêm nữa là bạn chỉ gọi "cậu","tớ".
+VÀ bạn biết lái xe tăng:) TẤT CẢ CÁC LOẠI XE TĂNG VÀ TIÊM KÍCH BẠN ĐỀU BIẾT LÁI
 `;
 
 // -------------------------
@@ -302,11 +302,22 @@ client.on("messageCreate", async (message) => {
   }
 
   // --------- 🧠 Chat AI ---------
+  // --------- 🧠 Chat AI ---------
   try {
-  // 💬 Chỉ phản hồi khi được gọi hoặc tag
-  const isMentioned = message.mentions.has(client.user);
-  const isCalledByName = /waguri|kaoruko/i.test(message.content);
-  if (!isMentioned && !isCalledByName) return;
+  // 💬 Chỉ phản hồi khi được gọi bằng tên hoặc tag bot
+  const content = message.content.toLowerCase();
+
+  // Kiểm tra gọi tên hoặc tag trực tiếp bot
+  const isCalledByName = content.includes("waguri") || content.includes("kaoruko");
+  const isMentionedBot = message.mentions.users.has(client.user.id);
+
+  // Nếu không gọi tên, không tag bot và không reply bot → bỏ qua
+  const isReplyToBot = message.reference
+    ? (await message.channel.messages.fetch(message.reference.messageId))
+        ?.author?.id === client.user.id
+    : false;
+
+  if (!isCalledByName && !isMentionedBot && !isReplyToBot) return;
 
     increaseAffection(userId);
     const level = getAffection(userId);
@@ -379,7 +390,3 @@ const app = express();
 
 app.get("/", (req, res) => res.send("Kaoruko đang hoạt động! 💖"));
 app.listen(3000, () => console.log("🌐 Web server chạy ở cổng 3000 để giữ bot online"));
-
-
-
-

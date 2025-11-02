@@ -78,7 +78,7 @@ import { ActivityType } from "discord.js";
 // Manual / Auto setup
 let manualOverride = false;
 let manualStatus = {
-  name: 'đi chơi cùng dev-nguyenbui1406!',
+  name: 'đang ngủ, đừng làm phiền Kaoruko🌙',
   type: ActivityType.Playing,
   status: 'dnd'
 };
@@ -389,4 +389,5 @@ const app = express();
 
 app.get("/", (req, res) => res.send("Kaoruko đang hoạt động! 💖"));
 app.listen(3000, () => console.log("🌐 Web server chạy ở cổng 3000 để giữ bot online"));
+
 

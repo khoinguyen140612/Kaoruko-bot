@@ -172,21 +172,40 @@ client.on("ready", () => {
 const commands = [
   new SlashCommandBuilder()
     .setName('sendmessage')
-    .setDescription('Gửi tin nhắn đến một kênh nhất định')
+    .setDescription('Gửi tin nhắn cùng rất nhìu tùy chọn nha~')
     .addChannelOption(option =>
       option.setName('channel')
-            .setDescription('Chọn kênh muốn gửi')
-            .setRequired(true))
+        .setDescription('Cái này để chọn kênh gửi tin nhắn đến đó~')
+        .setRequired(true)
+    )
     .addStringOption(option =>
       option.setName('content')
-            .setDescription('Nội dung tin nhắn')
-            .setRequired(true))
-    .addBooleanOption(option =>
-      option.setName('embed')
-            .setDescription('Có gửi dưới dạng embed không?')
-            .setRequired(false))
+        .setDescription('Cái này là "tin nhắn thường" không phải embed á nha~')
+        .setRequired(false)
+    )
+    .addStringOption(option =>
+      option.setName('title')
+        .setDescription('Tiêu đề embed (là cái dòng ở trên cùng ngen)')
+        .setRequired(false)
+    )
+    .addStringOption(option =>
+      option.setName('description')
+        .setDescription('Nội dung embed (là cái ở dưới tiêu đề á)')
+        .setRequired(false)
+    )
+    .addStringOption(option =>
+      option.setName('color')
+        .setDescription('Màu embed (vd: #ff0000 ghi xanh đỏ tím vàng tui không nhận đâu à nha~)')
+        .setRequired(false)
+    )
+    .addAttachmentOption(option =>
+      option.setName('attachment')
+        .setDescription('File đính kèm (thêm ảnh hoặc tệp gì đó chẳng hạn)')
+        .setRequired(false)
+    )
     .toJSON()
 ];
+
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
@@ -213,22 +232,70 @@ client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === 'sendmessage') {
-    const channel = interaction.options.getChannel('channel');
-    const content = interaction.options.getString('content');
-    const useEmbed = interaction.options.getBoolean('embed') || false;
+  await interaction.deferReply({ ephemeral: true });
+  const channel = interaction.options.getChannel('channel');
+  const content = interaction.options.getString('content');
+  const title = interaction.options.getString('title');
+  const description = interaction.options.getString('description');
+  const colorInput = interaction.options.getString('color');
+  const attachment = interaction.options.getAttachment('attachment');
 
-    if (useEmbed) {
-      await channel.send({ embeds: [{ description: content, color: 0xFFC0CB }] });
-    } else {
-      await channel.send(content);
-    }
+  let embed = null;
 
-    await interaction.reply({
-  content: `✅ Đã gửi tin nhắn đến ${channel}`,
-  ephemeral: true
+// ===== VALIDATE COLOR (ff0000 hoặc #ff0000) =====
+let color = 0xFFC0CB; // màu mặc định
+
+if (colorInput) {
+  let hex = colorInput.startsWith("#")
+    ? colorInput.slice(1)
+    : colorInput;
+
+  if (!/^[0-9A-Fa-f]{6}$/.test(hex)) {
+    return interaction.editReply(
+      "❌ Màu embed phải là `RRGGBB` hoặc `#RRGGBB` nha~ (vd:ff0000 hoặc #ff0000)"
+    );
+  }
+
+  color = parseInt(hex, 16);
+}
+
+// ===== TẠO EMBED =====
+if (title || description) {
+  embed = {
+    title: title ?? undefined,
+    description: description ?? undefined,
+    color: color
+  };
+}
+
+
+  if (!content && !embed && !attachment) {
+  return interaction.editReply(
+    "❌ Bạn phải nhập content, embed hoặc file chứ:(."
+  );
+}
+
+
+ try {
+  await channel.send({
+    content: content ?? undefined,
+    embeds: embed ? [embed] : [],
+    files: attachment ? [attachment] : []
+  });
+
+  await interaction.editReply(
+    `✅ Đã gửi tin nhắn đến ${channel} rùi nè:)`
+  );
+} catch (err) {
+  console.error("❌ Lỗi gửi tin nhắn:", err);
+  await interaction.editReply(
+    "❌ Không gửi được tin nhắn:( (có thể tui thiếu quyền ở kênh này)"
+  );
+}
+
+
+}
 });
-}   // đóng if (interaction.commandName === 'sendmessage')
-}); // đóng client.on('interactionCreate')
 
 
 

@@ -27,16 +27,16 @@ import { ActivityType } from "discord.js";
 // Manual / Auto setup
 let manualOverride = false;
 let manualStatus = {
-  name: 'Chào mừng Đại hội Đảng toàn quốc lần thứ XIV.🇻🇳',
+  name: 'Chào mừng Đại hội đại biểu toàn quốc lần thứ XIV của Đảng. 🇻🇳',
   type: ActivityType.Watching,
   status: 'online'
 };
 
 const autoStatuses = [
-  { name: 'đi chơi cùng Rintarou!', type: ActivityType.Playing, status: 'dnd' },
-  { name: 'nhạc cực chill nè:)', type: ActivityType.Listening, status: 'idle' },
-  { name: 'TV cùng em trai.', type: ActivityType.Watching, status: 'online' },
-  { name: 'quýnh lộn lời nói của cô giáo cùng những người bạn🔥', type: ActivityType.Competing, status: 'online' },
+  { name: 'Chào mừng Đại hội đại biểu toàn quốc lần thứ XIV của Đảng. 🇻🇳', type: ActivityType.Watching, status: 'online' },
+  { name: 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển', type: ActivityType.Watching, status: 'online' },
+  { name: 'Chào mừng Đại hội đại biểu toàn quốc lần thứ XIV của Đảng. 🇻🇳', type: ActivityType.Watching, status: 'online' },
+  { name: 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển', type: ActivityType.Watching, status: 'online' },
 ];
 
 // -------------------------
@@ -62,7 +62,7 @@ function startAutoStatus() {
   };
 
   update();
-  statusInterval = setInterval(update, 30 * 60 * 1000);
+  statusInterval = setInterval(update, 1 * 60 * 1000);
   }
 
 // -------------------------
@@ -322,5 +322,6 @@ client.login(process.env.DISCORD_TOKEN);
 import express from "express";
 const app = express();
 
-app.get("/", (req, res) => res.send("Kaoruko đang hoạt động! 💖"));
+app.get("/", (req, res) => res.send("Tui đang hoạt động! 💖"));
 app.listen(3000, () => console.log("🌐 Web server chạy ở cổng 3000 để giữ bot online"));
+
